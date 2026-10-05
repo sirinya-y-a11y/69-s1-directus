@@ -1,0 +1,285 @@
+# API
+# Directus
+# Base URL: http://localhost:8055
+
+
+# ============================================================
+# 1. Doctor
+# ============================================================
+
+### 1.1 Doctor Login
+POST {{$dotenv API_BASE_URL}}/auth/login
+Content-Type: application/json
+
+{
+    "email": "{{$dotenv DOCTOR_LOGIN_EMAIL}}",
+    "password": "{{$dotenv DOCTOR_LOGIN_PASSWORD}}"
+}
+
+
+### 1.2 Doctor Forgot Password
+POST {{$dotenv API_BASE_URL}}/auth/password/request
+Content-Type: application/json
+
+{
+    "email": "{{$dotenv DOCTOR_FORGOT_EMAIL}}"
+}
+
+
+### 1.2.1 Doctor Reset Password
+POST {{$dotenv API_BASE_URL}}/auth/password/reset
+Content-Type: application/json
+
+{
+    "token": "{{$dotenv DOCTOR_RESET_TOKEN}}",
+    "password": "{{$dotenv DOCTOR_NEW_PASSWORD}}"
+}
+
+
+### 1.3 Doctor Profile
+GET {{$dotenv API_BASE_URL}}/users/me
+Authorization: Bearer {{$dotenv DOCTOR_PROFILE_TOKEN}}
+
+
+
+# ============================================================
+# 2. Receptionist
+# ============================================================
+
+### 2.1 Receptionist Login
+POST {{$dotenv API_BASE_URL}}/auth/login
+Content-Type: application/json
+
+{
+    "email": "{{$dotenv RECEPTIONIST_LOGIN_EMAIL}}",
+    "password": "{{$dotenv RECEPTIONIST_LOGIN_PASSWORD}}"
+}
+
+
+### 2.2 Receptionist Forgot Password
+POST {{$dotenv API_BASE_URL}}/auth/password/request
+Content-Type: application/json
+
+{
+    "email": "{{$dotenv RECEPTIONIST_FORGOT_EMAIL}}"
+}
+
+
+### 2.2.1 Receptionist Reset Password
+POST {{$dotenv API_BASE_URL}}/auth/password/reset
+Content-Type: application/json
+
+{
+    "token": "{{$dotenv RECEPTIONIST_RESET_TOKEN}}",
+    "password": "{{$dotenv RECEPTIONIST_NEW_PASSWORD}}"
+}
+
+
+### 2.3 Receptionist Profile
+GET {{$dotenv API_BASE_URL}}/users/me
+Authorization: Bearer {{$dotenv RECEPTIONIST_PROFILE_TOKEN}}
+
+
+
+# ============================================================
+# 3. Content
+# ============================================================
+
+
+# ============================================================
+# 3.1 Patient
+# ใช้ Token ของ Receptionist
+# ============================================================
+
+### 3.1.1 Create
+POST {{$dotenv API_BASE_URL}}/items/patients
+Content-Type: application/json
+Authorization: Bearer {{$dotenv PATIENT_CREATE_TOKEN}}
+
+{
+    "patient_code": "{{$dotenv PATIENT_CREATE_CODE}}",
+    "first_name": "{{$dotenv PATIENT_CREATE_FIRST_NAME}}",
+    "last_name": "{{$dotenv PATIENT_CREATE_LAST_NAME}}",
+    "gender": "{{$dotenv PATIENT_CREATE_GENDER}}",
+    "phone": "{{$dotenv PATIENT_CREATE_PHONE}}",
+    "date_of_birth": "{{$dotenv PATIENT_CREATE_DATE_OF_BIRTH}}"
+}
+
+
+### 3.1.2 List All
+GET {{$dotenv API_BASE_URL}}/items/patients
+Authorization: Bearer {{$dotenv PATIENT_LIST_TOKEN}}
+
+
+### 3.1.3 List with ID
+GET {{$dotenv API_BASE_URL}}/items/patients/{{$dotenv PATIENT_LIST_ID}}
+Authorization: Bearer {{$dotenv PATIENT_LIST_ID_TOKEN}}
+
+
+### 3.1.4 Update
+PATCH {{$dotenv API_BASE_URL}}/items/patients/{{$dotenv PATIENT_UPDATE_ID}}
+Content-Type: application/json
+Authorization: Bearer {{$dotenv PATIENT_UPDATE_TOKEN}}
+
+{
+    "patient_code": "{{$dotenv PATIENT_UPDATE_CODE}}",
+    "first_name": "{{$dotenv PATIENT_UPDATE_FIRST_NAME}}",
+    "last_name": "{{$dotenv PATIENT_UPDATE_LAST_NAME}}",
+    "gender": "{{$dotenv PATIENT_UPDATE_GENDER}}",
+    "phone": "{{$dotenv PATIENT_UPDATE_PHONE}}",
+    "date_of_birth": "{{$dotenv PATIENT_UPDATE_DATE_OF_BIRTH}}"
+}
+
+
+### 3.1.5 Delete
+DELETE {{$dotenv API_BASE_URL}}/items/patients/{{$dotenv PATIENT_DELETE_ID}}
+Authorization: Bearer {{$dotenv PATIENT_DELETE_TOKEN}}
+
+
+
+# ============================================================
+# 3.2 Doctor
+# ใช้ Token ของ Doctors
+# ============================================================
+
+### 3.2.1 Create
+POST {{$dotenv API_BASE_URL}}/items/doctors
+Content-Type: application/json
+Authorization: Bearer {{$dotenv DOCTOR_CREATE_TOKEN}}
+
+{
+    "doctor_code": "{{$dotenv DOCTOR_CREATE_CODE}}",
+    "first_name": "{{$dotenv DOCTOR_CREATE_FIRST_NAME}}",
+    "last_name": "{{$dotenv DOCTOR_CREATE_LAST_NAME}}",
+    "specialty": "{{$dotenv DOCTOR_CREATE_SPECIALTY}}",
+    "phone": "{{$dotenv DOCTOR_CREATE_PHONE}}",
+    "email": "{{$dotenv DOCTOR_CREATE_EMAIL}}"
+}
+
+
+### 3.2.2 List All
+GET {{$dotenv API_BASE_URL}}/items/doctors
+Authorization: Bearer {{$dotenv DOCTOR_LIST_TOKEN}}
+
+
+### 3.2.3 List with ID
+GET {{$dotenv API_BASE_URL}}/items/doctors/{{$dotenv DOCTOR_LIST_ID}}
+Authorization: Bearer {{$dotenv DOCTOR_LIST_ID_TOKEN}}
+
+
+### 3.2.4 Update
+PATCH {{$dotenv API_BASE_URL}}/items/doctors/{{$dotenv DOCTOR_UPDATE_ID}}
+Content-Type: application/json
+Authorization: Bearer {{$dotenv DOCTOR_UPDATE_TOKEN}}
+
+{
+    "doctor_code": "{{$dotenv DOCTOR_UPDATE_CODE}}",
+    "first_name": "{{$dotenv DOCTOR_UPDATE_FIRST_NAME}}",
+    "last_name": "{{$dotenv DOCTOR_UPDATE_LAST_NAME}}",
+    "specialty": "{{$dotenv DOCTOR_UPDATE_SPECIALTY}}",
+    "phone": "{{$dotenv DOCTOR_UPDATE_PHONE}}",
+    "email": "{{$dotenv DOCTOR_UPDATE_EMAIL}}"
+}
+
+
+### 3.2.5 Delete
+DELETE {{$dotenv API_BASE_URL}}/items/doctors/{{$dotenv DOCTOR_DELETE_ID}}
+Authorization: Bearer {{$dotenv DOCTOR_DELETE_TOKEN}}
+
+
+
+# ============================================================
+# 3.3 Appointment
+# ใช้ Token ของ Receptionist
+# ============================================================
+
+### 3.3.1 Create
+POST {{$dotenv API_BASE_URL}}/items/appointments
+Content-Type: application/json
+Authorization: Bearer {{$dotenv APPOINTMENT_CREATE_TOKEN}}
+
+{
+    "patient_id": "{{$dotenv APPOINTMENT_CREATE_PATIENT_ID}}",
+    "doctor_id": "{{$dotenv APPOINTMENT_CREATE_DOCTOR_ID}}",
+    "appointment_date": "{{$dotenv APPOINTMENT_CREATE_DATE}}",
+    "symptom": "{{$dotenv APPOINTMENT_CREATE_SYMPTOM}}",
+    "status": "{{$dotenv APPOINTMENT_CREATE_STATUS}}"
+}
+
+
+### 3.3.2 List All
+GET {{$dotenv API_BASE_URL}}/items/appointments
+Authorization: Bearer {{$dotenv APPOINTMENT_LIST_TOKEN}}
+
+
+### 3.3.3 List with ID
+GET {{$dotenv API_BASE_URL}}/items/appointments/{{$dotenv APPOINTMENT_LIST_ID}}
+Authorization: Bearer {{$dotenv APPOINTMENT_LIST_ID_TOKEN}}
+
+
+### 3.3.4 Update
+PATCH {{$dotenv API_BASE_URL}}/items/appointments/{{$dotenv APPOINTMENT_UPDATE_ID}}
+Content-Type: application/json
+Authorization: Bearer {{$dotenv APPOINTMENT_UPDATE_TOKEN}}
+
+{
+    "patient_id": "{{$dotenv APPOINTMENT_UPDATE_PATIENT_ID}}",
+    "doctor_id": "{{$dotenv APPOINTMENT_UPDATE_DOCTOR_ID}}",
+    "appointment_date": "{{$dotenv APPOINTMENT_UPDATE_DATE}}",
+    "symptom": "{{$dotenv APPOINTMENT_UPDATE_SYMPTOM}}",
+    "status": "{{$dotenv APPOINTMENT_UPDATE_STATUS}}"
+}
+
+
+### 3.3.5 Delete
+DELETE {{$dotenv API_BASE_URL}}/items/appointments/{{$dotenv APPOINTMENT_DELETE_ID}}
+Authorization: Bearer {{$dotenv APPOINTMENT_DELETE_TOKEN}}
+
+
+
+# ============================================================
+# 3.4 Treatment
+# ใช้ Token ของ Doctor
+# ============================================================
+
+### 3.4.1 Create
+POST {{$dotenv API_BASE_URL}}/items/treatments
+Content-Type: application/json
+Authorization: Bearer {{$dotenv TREATMENT_CREATE_TOKEN}}
+
+{
+    "appointment_id": "{{$dotenv TREATMENT_CREATE_APPOINTMENT_ID}}",
+    "diagnosis": "{{$dotenv TREATMENT_CREATE_DIAGNOSIS}}",
+    "treatment_detail": "{{$dotenv TREATMENT_CREATE_DETAIL}}",
+    "medicine": "{{$dotenv TREATMENT_CREATE_MEDICINE}}",
+    "treatment_date": "{{$dotenv TREATMENT_CREATE_DATE}}"
+}
+
+
+### 3.4.2 List All
+GET {{$dotenv API_BASE_URL}}/items/treatments
+Authorization: Bearer {{$dotenv TREATMENT_LIST_TOKEN}}
+
+
+### 3.4.3 List with ID
+GET {{$dotenv API_BASE_URL}}/items/treatments/{{$dotenv TREATMENT_LIST_ID}}
+Authorization: Bearer {{$dotenv TREATMENT_LIST_ID_TOKEN}}
+
+
+### 3.4.4 Update
+PATCH {{$dotenv API_BASE_URL}}/items/treatments/{{$dotenv TREATMENT_UPDATE_ID}}
+Content-Type: application/json
+Authorization: Bearer {{$dotenv TREATMENT_UPDATE_TOKEN}}
+
+{
+    "appointment_id": "{{$dotenv TREATMENT_UPDATE_APPOINTMENT_ID}}",
+    "diagnosis": "{{$dotenv TREATMENT_UPDATE_DIAGNOSIS}}",
+    "treatment_detail": "{{$dotenv TREATMENT_UPDATE_DETAIL}}",
+    "medicine": "{{$dotenv TREATMENT_UPDATE_MEDICINE}}",
+    "treatment_date": "{{$dotenv TREATMENT_UPDATE_DATE}}"
+}
+
+
+### 3.4.5 Delete
+DELETE {{$dotenv API_BASE_URL}}/items/treatments/{{$dotenv TREATMENT_DELETE_ID}}
+Authorization: Bearer {{$dotenv TREATMENT_DELETE_TOKEN}}

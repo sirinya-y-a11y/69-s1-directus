@@ -2,6 +2,7 @@ services:
   db:
     image: postgres:16-alpine
     container_name: 69-s1-directus-db
+    restart: unless-stopped
     ports:
       - "${POSTGRES_PORT}:5432"
     environment:
@@ -10,12 +11,20 @@ services:
       - POSTGRES_DB=${POSTGRES_DB}
     volumes:
       - ./data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+      start_period: 10s
 
   admin:
     image: dpage/pgadmin4
     container_name: 69-s1-directus-admin
+    restart: unless-stopped
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     ports:
       - "${PGADMIN_DEFAULT_PORT}:80"
     environment:
@@ -24,20 +33,44 @@ services:
     volumes:
       - ./data-pgadmin:/var/lib/pgadmin
 
+  mailpit:
+    image: axllent/mailpit:latest
+    container_name: 69-s1-directus-mailpit
+    restart: unless-stopped
+    ports:
+      - "${MAILPIT_UI_PORT}:8025"
+
   app:
     image: directus/directus:latest
     container_name: 69-s1-directus-app
+    restart: unless-stopped
     depends_on:
-      - db
+      db:
+        condition: service_healthy
+      mailpit:
+        condition: service_started
     ports:
       - "${APP_PORT}:8055"
     environment:
+      # Directus
       - SECRET=${DIRECTUS_SECRET}
+
+      # Database
       - DB_CLIENT=${DB_CLIENT}
       - DB_HOST=${DB_HOST}
       - DB_PORT=${DB_PORT}
       - DB_DATABASE=${POSTGRES_DB}
       - DB_USER=${POSTGRES_USER}
       - DB_PASSWORD=${POSTGRES_PASSWORD}
+
+      # Initial Administrator
       - ADMIN_EMAIL=${DIRECTUS_ADMIN_EMAIL}
       - ADMIN_PASSWORD=${DIRECTUS_ADMIN_PASSWORD}
+
+      # Email / Mailpit
+      - EMAIL_TRANSPORT=${EMAIL_TRANSPORT}
+      - EMAIL_SMTP_HOST=${EMAIL_SMTP_HOST}
+      - EMAIL_SMTP_PORT=${EMAIL_SMTP_PORT}
+      - EMAIL_SMTP_SECURE=${EMAIL_SMTP_SECURE}
+      - EMAIL_SMTP_IGNORE_TLS=${EMAIL_SMTP_IGNORE_TLS}
+      - EMAIL_FROM=${EMAIL_FROM}
